@@ -1,23 +1,35 @@
-CREATE TABLE IF NOT EXISTS country (
+DROP TABLE IF EXISTS country;
+DROP TABLE IF EXISTS area;
+DROP TABLE IF EXISTS city;
+DROP TABLE IF EXISTS mountain;
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS climb;
+DROP TABLE IF EXISTS club_event;
+DROP TABLE IF EXISTS climber;
+DROP TABLE IF EXISTS emergency_contact;
+DROP TABLE IF EXISTS climber_climb_m2m;
+
+
+CREATE TABLE country (
 	country_id SERIAL PRIMARY KEY,
 	country_name VARCHAR(60) UNIQUE NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS area (
+CREATE TABLE area (
 	area_id SERIAL PRIMARY KEY,
 	area_name VARCHAR(120) UNIQUE NOT NULL,
 	country_id INT NOT NULL,
 	FOREIGN KEY (country_id) REFERENCES country(country_id)
 );
 
-CREATE TABLE IF NOT EXISTS city (
+CREATE TABLE city (
 	city_id SERIAL PRIMARY KEY,
 	city_name VARCHAR(120) UNIQUE NOT NULL,
 	country_id INT NOT NULL,
 	FOREIGN KEY (country_id) REFERENCES country(country_id)
 );
 
-CREATE TABLE IF NOT EXISTS mountain (
+CREATE TABLE mountain (
 	mountain_id SERIAL PRIMARY KEY,
 	mountain_name VARCHAR(120) UNIQUE NOT NULL,
 	height INT NOT NULL CHECK (height > 0),
@@ -25,14 +37,14 @@ CREATE TABLE IF NOT EXISTS mountain (
 	FOREIGN KEY (area_id) REFERENCES area(area_id)
 );
 
-CREATE TABLE IF NOT EXISTS address (
+CREATE TABLE address (
 	address_id SERIAL PRIMARY KEY,
 	address VARCHAR(300) NOT NULL,
 	city_id INT NOT NULL,
 	FOREIGN KEY (city_id) REFERENCES city(city_id)
 );
 
-CREATE TABLE IF NOT EXISTS climb (
+CREATE TABLE climb (
     climb_id SERIAL PRIMARY KEY,
     beginning_date TIMESTAMP NOT NULL CHECK (beginning_date > '2000-01-01'::DATE),
     ending_date TIMESTAMP NOT NULL CHECK (ending_date > '2000-01-01'::DATE),
@@ -41,7 +53,7 @@ CREATE TABLE IF NOT EXISTS climb (
     CHECK (ending_date > beginning_date)
 );
 
-CREATE TABLE IF NOT EXISTS club_event (
+CREATE TABLE club_event (
 	event_id SERIAL PRIMARY KEY,
     beginning_date TIMESTAMP NOT NULL CHECK (beginning_date > '2000-01-01'::DATE),
     ending_date TIMESTAMP NOT NULL CHECK (ending_date > '2000-01-01'::DATE),
@@ -52,7 +64,7 @@ CREATE TABLE IF NOT EXISTS club_event (
 	FOREIGN KEY (address_id) REFERENCES address(address_id)
 );
 
-CREATE TABLE IF NOT EXISTS climber (
+CREATE TABLE climber (
     climber_id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
@@ -63,7 +75,7 @@ CREATE TABLE IF NOT EXISTS climber (
     FOREIGN KEY (address_id) REFERENCES address(address_id)
 );
 
-CREATE TABLE IF NOT EXISTS emergency_contact (
+CREATE TABLE emergency_contact (
     contact_id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
@@ -75,7 +87,7 @@ CREATE TABLE IF NOT EXISTS emergency_contact (
     FOREIGN KEY (climber_id) REFERENCES climber(climber_id)
 );
 
-CREATE TABLE IF NOT EXISTS climber_climb_m2m (
+CREATE TABLE climber_climb_m2m (
 	climb_id INT NOT NULL,
 	climber_id INT NOT NULL,
 	FOREIGN KEY (climber_id) REFERENCES climber(climber_id),
