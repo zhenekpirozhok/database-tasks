@@ -77,7 +77,7 @@ CREATE TABLE DimProduct (
 CREATE TABLE FactSales (
     SalesID SERIAL PRIMARY KEY,
     DateID INT,
-    CustomerID INT,
+    CustomerID VARCHAR(5),
     ProductID INT,
     EmployeeID INT,
     CategoryID INT,
@@ -96,7 +96,3 @@ CREATE TABLE FactSales (
     FOREIGN KEY (ShipperID) REFERENCES DimShipper(ShipperID),
     FOREIGN KEY (SupplierID) REFERENCES DimSupplier(SupplierID)
 );
-
-
-
-
